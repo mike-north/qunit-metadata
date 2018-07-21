@@ -1,10 +1,15 @@
-import { module, test } from 'qunit-decorators';
-import hello from 'qunit-metadata';
+import { suite, test } from 'qunit-decorators';
+import md from 'qunit-metadata';
 
-@module
-class FirstModule {
+const { unpatch } = md(QUnit);
+
+@suite
+class InstallTest {
   @test
-  helloTest(assert: Assert) {
-    assert.equal(hello(), 'Hello from qunit-metadata');
+  apiSurfaceExists(assert: Assert) {
+    assert.ok(md, 'Default export exists');
+    assert.equal(typeof md, 'function', 'Default export is a function');
+    assert.ok(unpatch, 'unpatch exists');
+    assert.equal(typeof unpatch, 'function', 'unpatch is a function');
   }
 }
