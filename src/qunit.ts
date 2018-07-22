@@ -8,6 +8,8 @@ declare module 'qunit' {
       module(name: string, hooks?: Hooks, nested?: (hooks: NestedHooks) => void): QUnitMetaEnabled;
       module(name: string, nested?: (hooks: NestedHooks) => void): QUnitMetaEnabled;
       test(name: string, callback: (assert: Assert) => void): QUnitMetaEnabled;
+      todo(name: string, callback: (assert: Assert) => void): QUnitMetaEnabled;
+      skip(name: string, callback: (assert: Assert) => void): QUnitMetaEnabled;
     }
   }
 }
