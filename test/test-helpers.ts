@@ -1,7 +1,3 @@
-import md from 'qunit-metadata';
+import patch from 'qunit-metadata';
 
-function init() {
-  md(QUnit);
-}
-
-init();
+patch(QUnit);
