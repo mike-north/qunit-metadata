@@ -42,7 +42,7 @@ class MyTests {
 
   @test('Make sure 1 is more than 0', { toRemove: true }/* <-- test metadata */)
   verifyOne(assert: Assert) {
-    assert.ok(1 > 0, 'One should be more than zero);
+    assert.ok(1 > 0, 'One should be more than zero');
   }
 }
 
@@ -56,7 +56,7 @@ module('A description for my suite')
   .meta({ writtenBy: 'Mike' });/* <-- module metadata */
 
 test('Make sure 1 is more than 0', assert => {
-  assert.ok(1 > 0, 'One should be more than zero);
+  assert.ok(1 > 0, 'One should be more than zero');
 }).meta({ toRemove: true });/* <-- test metadata */
 
 ```
@@ -69,7 +69,7 @@ import { module, test } from 'qunit';
 module('A description for my suite', hooks => {
   
   test('Make sure 1 is more than 0', assert => {
-    assert.ok(1 > 0, 'One should be more than zero);
+    assert.ok(1 > 0, 'One should be more than zero');
   }).meta({ toRemove: true });/* <-- test metadata */
 
 })
