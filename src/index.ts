@@ -3,11 +3,13 @@ export interface ModuleInfo {
   tests: TestInfo[];
   meta?: any;
 }
+
 export interface TestInfo {
   module: string;
   name: string;
   meta?: any;
 }
+
 export interface PrivateConfig {
   currentModule?: ModuleInfo;
   current: {
