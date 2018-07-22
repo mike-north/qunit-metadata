@@ -1,39 +1,47 @@
-class QUnitMetaState {
-  lastModuleName: string = "";
-  lastModuleMeta: { [k: string]: any } = {};
-  testMeta: { [k: string]: any } = {};
+interface ModuleInfo {
+  name: string;
+  tests: TestInfo[];
+  meta?: any;
+}
+interface TestInfo {
+  module: string;
+  name: string;
+  meta?: any;
+}
+interface PrivateConfig {
+  currentModule?: ModuleInfo;
+  current: {
+    module: ModuleInfo;
+  };
 }
 
-interface QUnitModuleStartCallbackDetails {
-  name: string;
+type PartOfQunit = Pick<
+  typeof QUnit,
+  | 'test'
+  | 'module'
+  | 'testStart'
+  | 'testDone'
+  | 'moduleDone'
+  | 'moduleStart'
+  | 'begin'
+  | 'done'
+> & {
+  config: PrivateConfig;
+};
+
+function qUnitCurrentModule(q: PartOfQunit): ModuleInfo {
+  if (q.config.current && q.config.current.module) {
+    return q.config.current.module;
+  } else {
+    if (!q.config.currentModule) {
+      throw new Error('QUnit.config.currentModule not found');
+    }
+    return q.config.currentModule;
+  }
 }
-interface QUnitModuleDoneCallbackDetails {
-  name: string;
-  failed: number;
-  passed: number;
-  total: number;
-  runtime: number;
-}
-interface QUnitTestStartCallbackDetails {
-  name: string;
-  module: string;
-}
-interface QUnitTestDoneCallbackDetails {
-  name: string;
-  module: string;
-  failed: number;
-  passed: number;
-  total: number;
-  runtime: number;
-}
-type QUnitCallbackDetails =
-  | QUnitModuleDoneCallbackDetails
-  | QUnitModuleStartCallbackDetails
-  | QUnitTestDoneCallbackDetails
-  | QUnitTestStartCallbackDetails;
 
 class QUnitMetaManager {
-  private state = new QUnitMetaState();
+  constructor(private q: PartOfQunit) {}
   patchQUnitTest(original: typeof QUnit.test) {
     return (name: string, callback: (assert: Assert) => void) => {
       original(name, callback);
@@ -46,7 +54,7 @@ class QUnitMetaManager {
       hooksOrNested?: Hooks | ((hooks: NestedHooks) => void),
       nested?: (hooks: NestedHooks) => void
     ) => {
-      if (typeof hooksOrNested === "function") {
+      if (typeof hooksOrNested === 'function') {
         original(name, hooksOrNested);
       } else {
         original(name, hooksOrNested, nested);
@@ -55,102 +63,65 @@ class QUnitMetaManager {
     };
   }
 
-  patchQUnitCallbacks(originals: {
-    testStart: typeof QUnit.testStart;
-    testDone: typeof QUnit.testDone;
-    moduleDone: typeof QUnit.moduleDone;
-    moduleStart: typeof QUnit.moduleStart;
-  }): {
-    testStart: typeof QUnit.testStart;
-    testDone: typeof QUnit.testDone;
-    moduleDone: typeof QUnit.moduleDone;
-    moduleStart: typeof QUnit.moduleStart;
-  } {
-    return Object.keys(originals).reduce(
-      (patched, key) => {
-        patched[key] = (cb: any) => {
-          (originals as any)[key]((details: QUnitCallbackDetails) => {
-            cb(this.augmentCallbackDetails(key, details));
-          });
-        };
-        return patched;
-      },
-      {} as any
-    );
-  }
-  private augmentCallbackDetails(
-    cbName: string,
-    details: QUnitCallbackDetails
-  ) {
-    switch (cbName) {
-      default:
-        console.warn(
-          `[QUnit Metadata]: Attempt to augment unknown callback: "${cbName}"`
-        );
-        break;
-    }
-    return { ...details };
-  }
   private defineQUnitTest(name: string) {
-    let state = this.state;
-    return {
+    let t = qUnitCurrentModule(this.q).tests.filter(
+      (tt: { name: string }) => tt.name === name
+    )[0];
+    let met = {};
+    const api = {
       meta(obj: { [k: string]: any }) {
-        state.testMeta[`${state.lastModuleName}/${name}`] = {
-          ...obj,
-          ...state.lastModuleMeta
-        };
+        if (!t) return this; // Testing qunit-metadata its self
+        Object.assign(met, obj);
         return this;
       }
     };
+    if (t && !t.meta) {
+      Object.defineProperty(t, 'meta', {
+        value: met,
+        writable: false
+      });
+    } else if (!t) {
+      // tslint:disable-next-line:no-console
+      console.info(
+        `defineQUnitTest: Couldn't find test "${name}" in QUnit state. Probably testing qunit-metadata its self`
+      );
+    }
+    return api;
   }
-  private defineQUnitModule(name: string) {
-    let { state } = this;
-    state.lastModuleName = name;
-    return {
+  private defineQUnitModule(_name: string) {
+    let m = qUnitCurrentModule(this.q);
+    let met = {};
+    const api = {
       meta(obj: { [k: string]: any }) {
-        state.lastModuleMeta = obj;
+        Object.assign(met, obj);
         return this;
       }
     };
+    if (!m.meta) {
+      Object.defineProperty(m, 'meta', {
+        value: met,
+        writable: false
+      });
+    }
+    return api;
   }
 }
 
-export default function patchQunit(q: typeof QUnit) {
-  const man = new QUnitMetaManager();
+export default function patchQunit(q: PartOfQunit & { __patched?: any }) {
+  if (q.__patched) return q.__patched;
+  const man = new QUnitMetaManager(q);
 
-  let originalQunitTest: typeof QUnit.test = q.test;
-  let originalQunitModule: typeof QUnit.module = q.module;
-  let originalQunitEvents: {
-    testStart: typeof QUnit.testStart;
-    testDone: typeof QUnit.testDone;
-    moduleDone: typeof QUnit.moduleDone;
-    moduleStart: typeof QUnit.moduleStart;
-  } = {
-    testStart: q.testStart,
-    testDone: q.testDone,
-    moduleDone: q.moduleDone,
-    moduleStart: q.moduleStart
-  };
+  let originalQunitTest: typeof q.test = q.test;
+  let originalQunitModule: typeof q.module = q.module;
+
   q.module = man.patchQUnitModule(originalQunitModule);
   q.test = man.patchQUnitTest(originalQunitTest);
-  let {
-    testStart,
-    testDone,
-    moduleStart,
-    moduleDone
-  } = man.patchQUnitCallbacks(originalQunitEvents);
-  q.testStart = testStart;
-  q.testDone = testDone;
-  q.moduleStart = moduleStart;
-  q.moduleDone = moduleDone;
-  return {
+  const api = {
     unpatch() {
       q.test = originalQunitTest;
       q.module = originalQunitModule;
-      q.moduleDone = originalQunitEvents.moduleDone;
-      q.moduleStart = originalQunitEvents.moduleStart;
-      q.testStart = originalQunitEvents.testStart;
-      q.testDone = originalQunitEvents.testDone;
     }
   };
+  q.__patched = api;
+  return api;
 }
