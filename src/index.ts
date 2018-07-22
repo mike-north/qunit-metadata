@@ -1,21 +1,21 @@
-interface ModuleInfo {
+export interface ModuleInfo {
   name: string;
   tests: TestInfo[];
   meta?: any;
 }
-interface TestInfo {
+export interface TestInfo {
   module: string;
   name: string;
   meta?: any;
 }
-interface PrivateConfig {
+export interface PrivateConfig {
   currentModule?: ModuleInfo;
   current: {
     module: ModuleInfo;
   };
 }
 
-type PartOfQunit = Pick<
+export type PartOfQunit = Pick<
   typeof QUnit,
   | 'test'
   | 'module'
@@ -126,7 +126,7 @@ export default function patch(q: PartOfQunit & { __patched?: any } = QUnit) {
   return api;
 }
 
-type Locator<T, K extends keyof T = keyof T> = {
+export type Locator<T, K extends keyof T = keyof T> = {
   [KK in K]?: string | RegExp | ((val: T[KK]) => boolean)
 };
 
@@ -134,13 +134,13 @@ function validateLocator(l: any) {
   if (typeof l !== 'object') throw new Error(`Invalid locator ${l}`);
 }
 
-interface QUnitModuleDetails {
+export interface QUnitModuleDetails {
   moduleId: string;
   name: string;
   tests: QUnitTestDetails[];
   meta: { [k: string]: any };
 }
-interface QUnitTestDetails {
+export interface QUnitTestDetails {
   module: string;
   name: string;
   testId: string;
