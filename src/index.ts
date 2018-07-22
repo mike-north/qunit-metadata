@@ -28,16 +28,15 @@ type PartOfQunit = Pick<
 > & {
   config: PrivateConfig;
 };
-
+let lastModule: any;
 function qUnitCurrentModule(q: PartOfQunit): ModuleInfo {
+  if (q.config.currentModule) return q.config.currentModule;
   if (q.config.current && q.config.current.module) {
     return q.config.current.module;
-  } else {
-    if (!q.config.currentModule) {
-      throw new Error('QUnit.config.currentModule not found');
-    }
-    return q.config.currentModule;
   }
+  throw new Error(
+    'QUnit.config.currentModule and QUnit.config.current.module were both unavailable'
+  );
 }
 
 function patchQUnitTest(q: PartOfQunit, original: typeof QUnit.test) {
@@ -82,15 +81,25 @@ function defineQUnitTest(q: PartOfQunit, name: string) {
   }
   return api;
 }
-function defineQUnitModule(q: PartOfQunit, _name: string) {
-  let m = qUnitCurrentModule(q);
+function defineQUnitModule(q: PartOfQunit, name: string) {
+  let m = ((QUnit.config as any).modules as ModuleInfo[]).filter(
+    mo => mo.name === name
+  )[0];
+
   const api = {
     meta(obj: { [k: string]: any }) {
       Object.assign(m.meta, obj);
       return this;
     }
   };
-  if (!m.meta) m.meta = {};
+  if (!m) {
+    // tslint:disable-next-line:no-console
+    console.info(
+      `defineQUnitModule: Couldn't find module "${name}" in QUnit state. Probably testing qunit-metadata its self`
+    );
+  } else if (!m.meta) {
+    m.meta = {};
+  }
   return api;
 }
 
