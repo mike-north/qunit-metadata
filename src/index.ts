@@ -1,3 +1,4 @@
+import './qunit';
 export interface ModuleInfo {
   name: string;
   tests: TestInfo[];
@@ -125,6 +126,7 @@ export default function patch(q: PartOfQunit & { __patched?: any } = QUnit) {
     }
   };
   q.__patched = api;
+
   return api;
 }
 
@@ -137,16 +139,42 @@ function validateLocator(l: any) {
 }
 
 export interface QUnitModuleDetails {
+  meta: { [k: string]: any };
   moduleId: string;
   name: string;
+  parentModule: string;
+  skip?: boolean;
+  stats?: { all: number, bad: number, started: number};
+  suiteReport?: SuiteReport;
   tests: QUnitTestDetails[];
-  meta: { [k: string]: any };
+  testsRun?: number;
+  unskippedTestsRun?: number;
 }
 export interface QUnitTestDetails {
+  meta: { [k: string]: any };
   module: string;
   name: string;
   testId: string;
-  meta: { [k: string]: any };
+}
+
+export interface SuiteReport {
+  fullName: string[];
+  name: string;
+  tests: TestReport[];
+}
+export interface TestReport {
+  assertions: AssertionReport[];
+  fullName: string[];
+  name: string;
+  runtime: number;
+  skipped: boolean;
+  todo: boolean;
+  valid: boolean;
+}
+export interface AssertionReport {
+  message: string;
+  passed: boolean;
+  todo: boolean;
 }
 
 function locatorToPredicate<T>(loc: Locator<T>): (item: T) => boolean {

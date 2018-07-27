@@ -119,16 +119,45 @@ I plan to add more later, but for now it looks like
 
 ```ts
 interface QUnitModuleDetails {
+  meta: { [k: string]: any };
   moduleId: string;
   name: string;
+  parentModule: string;
+  skip?: boolean;
+  stats?: { all: number, bad: number, started: number};
+  suiteReport?: SuiteReport;
   tests: QUnitTestDetails[];
-  meta: { [k: string]: any };
+  testsRun?: number;
+  unskippedTestsRun?: number;
 }
+
 interface QUnitTestDetails {
+  meta: { [k: string]: any };
   module: string;
   name: string;
   testId: string;
-  meta: { [k: string]: any };
+}
+
+interface SuiteReport {
+  fullName: string[];
+  name: string;
+  tests: TestReport[];
+}
+
+interface TestReport {
+  assertions: AssertionReport[];
+  fullName: string[];
+  name: string;
+  runtime: number;
+  skipped: boolean;
+  todo: boolean;
+  valid: boolean;
+}
+
+interface AssertionReport {
+  message: string;
+  passed: boolean;
+  todo: boolean;
 }
 ```
 
