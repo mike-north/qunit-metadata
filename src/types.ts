@@ -69,7 +69,7 @@ export interface QUnitAssertionReport {
   todo: boolean;
 }
 
-type ReplaceProps<T, S, K extends (keyof T & keyof S)> = {
+export type ReplaceProps<T, S, K extends (keyof T & keyof S)> = {
   [P in keyof T]: P extends K ? S[P] : T[P];
 };
 
