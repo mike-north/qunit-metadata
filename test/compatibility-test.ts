@@ -1,5 +1,6 @@
 import { suite, test } from 'qunit-decorators';
 import './test-helpers';
+import { AugmentedQunitConfig } from './types';
 
 @suite('QUnit compatibility')
 class QUnitCompatibilityTests {
@@ -14,27 +15,27 @@ class QUnitCompatibilityTests {
   }
   @test('QUnit.config.modules')
   modules(assert: Assert) {
-    assert.ok((QUnit.config as any).modules, 'exists');
+    assert.ok((QUnit.config as AugmentedQunitConfig).modules, 'exists');
     assert.equal(
-      typeof (QUnit.config as any).modules.indexOf,
+      typeof (QUnit.config as AugmentedQunitConfig).modules.indexOf,
       'function',
       'looks like an array'
     );
   }
   @test('QUnit.config.modules[0].tests')
   moduleTests(assert: Assert) {
-    assert.ok((QUnit.config as any).modules[0].tests, 'exists');
+    assert.ok((QUnit.config as AugmentedQunitConfig).modules[0].tests, 'exists');
     assert.equal(
-      typeof (QUnit.config as any).modules[0].tests.indexOf,
+      typeof (QUnit.config as AugmentedQunitConfig).modules[0].tests.indexOf,
       'function',
       'looks like an array'
     );
   }
   @test('QUnit.config.modules[0].tests[0]')
   moduleTest(assert: Assert) {
-    assert.ok((QUnit.config as any).modules[0].tests[0], 'exists');
+    assert.ok((QUnit.config as AugmentedQunitConfig).modules[0].tests[0], 'exists');
     assert.equal(
-      typeof (QUnit.config as any).modules[0].tests[0].name,
+      typeof (QUnit.config as AugmentedQunitConfig).modules[0].tests[0].name,
       'string',
       'has a name that\'s a string'
     );

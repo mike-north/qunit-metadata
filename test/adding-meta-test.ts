@@ -1,4 +1,5 @@
 import './test-helpers';
+import { AugmentedQunitConfig } from './types';
 
 QUnit.module('A module with metadata').meta({ difficulty: 3 });
 
@@ -11,7 +12,7 @@ QUnit.test('A test with meta', assert => {
 }).meta({ points: 999 });
 
 QUnit.test('Module metadata ends up on QUnit state', assert => {
-  const { modules } = (QUnit.config as any);
+  const { modules } = (QUnit.config as AugmentedQunitConfig);
   const mods = modules.filter((m: any) => m.name === 'A module with metadata');
   assert.equal(mods.length, 1, 'Only one module of this name is found');
   const [ mod ] = mods;
