@@ -5,6 +5,19 @@ Add metadata to your QUnit tests, with your choice of ES5, ES6 or TypeScript syn
 [![Build Status](https://travis-ci.org/mike-north/qunit-metadata.svg?branch=master)](https://travis-ci.org/mike-north/qunit-metadata)
 [![Version](https://img.shields.io/npm/v/qunit-decorators.svg)](https://www.npmjs.com/package/qunit-metadata)
 
+## Why might you want to use this library
+
+Motivations for associating metadata with tests includes
+* Running a subset of tests, which match a particular criteria
+  * All acceptance tests, except those which involve mutating data
+  * All tests that involve a particular UI component
+  * (In a training workshop) all tests that are flagged with `level === 'beginner'`
+* Gathering data on a subset of tests, before during or after a run
+  * (In a training workshop) Attach `points: number` to tests in modules, and display the student's "score" based on how many tests their code passes
+  * After a test run, storing elapsed time for each test to disk, for comparison against future test runs.
+
+QUnit is very limited in terms of being able to attach some of these kinds of data to tests in a sustainable way. The best you can do is apply something like a hashtag, or invent your own microsyntax (all of which would be placed in the test/module titles). This library appends custom metadata as a JavaScript object to QUnit's own data structures, allowing for greater flexibility and maintainability.
+
 ## Setup
 
 ### Step 1: Install
