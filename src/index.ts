@@ -51,3 +51,4 @@ export default function patch(q: PartOfQunit & { __patched?: any } = QUnit) {
 
 export * from './query';
 export * from './types';
+export { Locator } from './locator';
