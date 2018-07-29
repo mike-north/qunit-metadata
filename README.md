@@ -3,7 +3,7 @@
 Add metadata to your QUnit tests, with your choice of ES5, ES6 or TypeScript syntax
 
 [![Build Status](https://travis-ci.org/mike-north/qunit-metadata.svg?branch=master)](https://travis-ci.org/mike-north/qunit-metadata)
-[![Version](https://img.shields.io/npm/v/qunit-decorators.svg)](https://www.npmjs.com/package/qunit-metadata)
+[![Version](https://img.shields.io/npm/v/qunit-metadata.svg)](https://www.npmjs.com/package/qunit-metadata)
 
 ## Why might you want to use this library
 
