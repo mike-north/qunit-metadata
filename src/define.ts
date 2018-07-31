@@ -1,4 +1,4 @@
-import { Q_CONFIG } from './config';
+import { qunitConfig } from './config';
 import { PartOfQunit, QUnitPartialConfigModuleInfo } from './types';
 
 let lastModule: QUnitPartialConfigModuleInfo;
@@ -35,7 +35,8 @@ export function defineQUnitTest(q: PartOfQunit, name: string) {
   return api;
 }
 export function defineQUnitModule(_q: PartOfQunit, name: string) {
-  let m = (Q_CONFIG.modules as QUnitPartialConfigModuleInfo[]).filter(
+  // TODO remove global use of QUnit
+  let m = (qunitConfig(QUnit).modules as QUnitPartialConfigModuleInfo[]).filter(
     mo => mo.name === name
   )[0];
 
