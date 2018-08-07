@@ -36,15 +36,17 @@
     "ember-cli": "^3.1.4",
     "libkit": "^0.6.0",
     "qunit": "^2.4.1",
-    "shelljs": "^0.7.8",
-    "tslint": "^5.7.0",
     "qunit-decorators": "^1.1.0",
-    "typescript": "^2.4.2",
-    "travis-deploy-once": "^5.0.1",
     "semantic-release": "^15.8.1",
-    "ts-std": "^0.6.2"
+    "shelljs": "^0.7.8",
+    "travis-deploy-once": "^5.0.1",
+    "ts-std": "^0.6.2",
+    "tslint": "^5.7.0",
+    "typescript": "^2.4.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "object-predicate": "^1.2.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/mike-north/qunit-metadata.git"
