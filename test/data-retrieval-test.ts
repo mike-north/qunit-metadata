@@ -51,7 +51,7 @@ class DataRetrivalTests {
     const mod = (QUnit.config as any).modules
       .filter((m: any) => m.meta && m.meta.pencil === 'mechanical')[0];
     let data = getModuleData({
-      meta: m => m.pencil === 'mechanical'
+      meta: m => m && m.pencil === 'mechanical'
     });
     a.ok(data, 'it returns data');
     if (data === null) return; // never happens while tests pass, but makes TS happy
@@ -64,7 +64,7 @@ class DataRetrivalTests {
       return acc.concat(m.tests.filter((t: any) => t.meta && t.meta.marker === 'sharpie'));
     }, [] as any[])[0];
     let data = getTestData({
-      meta: m => m.marker === 'sharpie'
+      meta: m => m && m.marker === 'sharpie'
     });
     a.ok(data, 'it returns data');
     if (data === null) return; // never happens while tests pass, but makes TS happy
@@ -94,7 +94,7 @@ class DataRetrivalTests {
   @test getAllModuleDataWithFilter(a: Assert) {
     const allModules = getAllModuleData();
     const someModules = getAllModuleData({
-      meta: m => m.pencil === 'mechanical'
+      meta: m => m && m.pencil === 'mechanical'
     });
     a.ok(someModules, 'returned something truthy');
     a.ok(someModules instanceof Array, 'looks like it returned an array');
@@ -108,7 +108,7 @@ class DataRetrivalTests {
   @test getAllTestDataWithFilter(a: Assert) {
     const allTests = getAllTestData();
     const someTests = getAllTestData({
-      meta: m => m.marker === 'sharpie'
+      meta: m => m && m.marker === 'sharpie'
     });
     a.ok(someTests, 'returned something truthy');
     a.ok(someTests instanceof Array, 'looks like it returned an array');
@@ -120,9 +120,9 @@ class DataRetrivalTests {
 
   @test getAllTestDataWithModuleAndTestFilters(a: Assert) {
     const someTests = getAllTestData([{
-      meta: m => m.pencil === 'mechanical'
+      meta: m => m && m.pencil === 'mechanical'
     }, {
-      meta: m => m.marker === 'sharpie'
+      meta: m => m && m.marker === 'sharpie'
     }]);
     a.ok(someTests, 'returned something truthy');
     a.ok(someTests instanceof Array, 'looks like it returned an array');
@@ -130,7 +130,7 @@ class DataRetrivalTests {
     const otherTests = getAllTestData([{
       meta: m => m === {}
     }, {
-      meta: m => m.marker === 'sharpie'
+      meta: m => m && m.marker === 'sharpie'
     }]);
     a.ok(otherTests, 'returned something truthy');
     a.ok(otherTests instanceof Array, 'looks like it returned an array');
