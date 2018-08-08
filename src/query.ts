@@ -20,7 +20,7 @@ export function getModuleData(
   return null;
 }
 
-type MaybeDoubleLoc =
+export type PredicatePair =
   | (
       | PredicateObject<Partial<QUnitTestDetails>>
       | ((mod: Partial<QUnitTestDetails>) => boolean))
@@ -34,7 +34,7 @@ type MaybeDoubleLoc =
     ];
 
 export function getTestData(
-  loc: MaybeDoubleLoc,
+  loc: PredicatePair,
   opts?: QueryOptions
 ): QUnitTestDetails | null {
   let testLoc = loc instanceof Array ? loc[1] : loc;
@@ -70,7 +70,7 @@ export function getAllModuleData(
 }
 
 export function getAllTestData(
-  loc?: MaybeDoubleLoc,
+  loc?: PredicatePair,
   opts?: QueryOptions
 ): QUnitTestDetails[] {
   let testLoc = loc && loc instanceof Array ? loc[1] : loc || null;
