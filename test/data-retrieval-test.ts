@@ -3,9 +3,7 @@ import {
   getAllModuleData,
   getAllTestData,
   getModuleData,
-  getTestData,
-  QUnitModuleDetails,
-  QUnitTestDetails
+  getTestData
 } from 'qunit-metadata';
 
 @suite({ pencil: 'mechanical' })
