@@ -1,5 +1,5 @@
 import { suite, test } from 'qunit-decorators';
-import { getAllModuleData, getAllTestData, getModuleData, getTestData } from 'qunit-metadata';
+import { getAllModuleData, getAllTestData, getModuleData, getTestData, QUnitModuleDetails, QUnitTestDetails } from 'qunit-metadata';
 
 @suite({ pencil: 'mechanical' })
 class DataRetrivalTests {
@@ -135,5 +135,15 @@ class DataRetrivalTests {
     a.ok(otherTests, 'returned something truthy');
     a.ok(otherTests instanceof Array, 'looks like it returned an array');
     a.equal(otherTests.length, 0, 'the array has nothing in it');
+  }
+
+  @test 'get all test data via function filters'(a: Assert) {
+    const someTests = getAllTestData([
+      ((m) => !!(m.meta && m.meta.pencil === 'mechanical')),
+      ((m) => !!(m.meta && m.meta.marker === 'sharpie'))
+    ]);
+    a.ok(someTests, 'returned something truthy');
+    a.ok(someTests instanceof Array, 'looks like it returned an array');
+    a.equal(someTests.length, 1, 'the array has one thing in it');
   }
 }
