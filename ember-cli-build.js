@@ -1,5 +1,6 @@
 'use strict';
 
 module.exports = require('libkit').build({
-  name: 'qunit-metadata'
+  name: 'qunit-metadata',
+  root: __dirname
 });
