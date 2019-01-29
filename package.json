@@ -47,8 +47,8 @@
     "shelljs": "0.8.3",
     "travis-deploy-once": "5.0.10",
     "ts-std": "0.7.0",
-    "tslint": "5.12.0",
-    "typescript": "3.2.2"
+    "tslint": "5.12.1",
+    "typescript": "3.2.4"
   },
   "dependencies": {
     "object-predicate": "^1.2.0"
