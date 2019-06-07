@@ -39,7 +39,7 @@
     "@mike-north/js-lib-semantic-release-config": "1.0.1",
     "@types/qunit": "2.5.4",
     "ember-cli": "3.6.1",
-    "husky": "1.2.1",
+    "husky": "2.4.0",
     "libkit": "mike-north/libkit#ts-3",
     "qunit-decorators": "1.1.5",
     "qunit": "2.9.2",
