@@ -44,7 +44,7 @@
     "qunit-decorators": "1.1.5",
     "qunit": "2.17.2",
     "semantic-release": "15.12.5",
-    "shelljs": "0.8.4",
+    "shelljs": "0.8.5",
     "travis-deploy-once": "5.0.11",
     "ts-std": "0.7.0",
     "tslint": "5.17.0",
