@@ -42,7 +42,7 @@
     "husky": "2.4.1",
     "libkit": "mike-north/libkit#ts-3",
     "qunit-decorators": "1.1.5",
-    "qunit": "2.17.2",
+    "qunit": "2.20.1",
     "semantic-release": "15.12.5",
     "shelljs": "0.8.5",
     "travis-deploy-once": "5.0.11",
